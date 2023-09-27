@@ -15,7 +15,24 @@ pipeline {
 					sh 'mvn snyk:test -fn'
 				}
 			}
-    }		
-  }
-}
+   	stage('Build') { 
+            steps { 
+               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
+                 script{
+                 app =  docker.build("asmicroservice")
+                 }
+               }
+            }
+    }
 
+	stage('Push') {
+            steps {
+                script{
+                    docker.withRegistry('https://145988340565.dkr.ecr.us-west-2.amazonaws.com', 'ecr:eu-west-3:aws-credentials') {
+                    app.push("latest")
+                    }
+                }
+            }
+    	}
+   }
+}
