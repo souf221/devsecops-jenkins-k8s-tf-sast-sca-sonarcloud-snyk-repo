@@ -20,7 +20,7 @@ pipeline {
       steps {
         withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
           script {
-            app = docker.build("asmicroservice")
+            app = docker.build("asg")
           }
         }
       }
