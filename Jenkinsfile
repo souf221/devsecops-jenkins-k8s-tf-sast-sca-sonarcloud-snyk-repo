@@ -9,5 +9,13 @@ pipeline {
 		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=asmicroservicesspring -Dsonar.organization=asmicroservicesspring -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=0276789007c8d134a6a421133cc2b388420e33b8'
 			}
         } 
+	   stage('RunSCAAnalysisUsingSnyk') {
+            steps {		
+				withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+					sh 'mvn snyk:test -fn'
+				}
+			}
+    }		
   }
 }
+
